@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3001;
 const path = require('path');
+const {v4 : uuidv4} = require('uuid')
 
 // parse incoming string or aray data
 app.use(express.urlencoded({ extended: true }));
@@ -11,6 +12,11 @@ app.use(express.json());
 app.use(express.static('public'))
 const { notes } = require('./Develop/db/db.json');
 
+
+function findById(id, notesArray) {
+  const result = notesArray.filter(note => note.id === id)[0];
+  return result;
+}
 
 function createNewNote(body, notesArray) {
   const note = body;
@@ -25,22 +31,34 @@ function createNewNote(body, notesArray) {
 
 // gets results of api/notes
 app.get('/api/notes', (req, res) => {
-  let results = notes;
-  if (req.query) {
-    results = filterByQuery(req.query, results);
+  const results = notes
+  if (results) {
+    res.json(results);
+  } else {
+    res.send(404);
   }
-  res.json(results);
 });
+
+// gets a note by id
+app.get('/api/notes/:id', (req, res) => {
+  const result = findById(req.params.id, notes);
+  if (result) {
+    res.json(result);
+  } else {
+    res.sendStatus(404);
+  }
+})
 
 // allow notes to be sent to api/notes
 app.post('/api/notes', (req, res) => {
   req.body.id = notes.length.toString();
 
+    //const id = uuidv4()
+
+
   if (!validateNote(req.body)) {
     res.status(400).send('The note is not properly formatted.');
   } else {
-    const note = createNewNote(req.body, notes);
-
     res.json(req.body);
   }
 });
@@ -59,12 +77,14 @@ app.listen(PORT, () => {
   console.log(`API server now on port ${PORT}!`);
 });
 
-// creates path to index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './Develop/assets/index.html'));
-});
-
 // creates path to notes.html
 app.get('/notes', (req, res) => {
-  res.sendFile(path.join(__dirname, './Develop/assets/notes.html'));
+  res.sendFile(path.join(__dirname, './Develop/public/notes.html'));
 });
+
+// creates path to index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './Develop/public/index.html'));
+});
+
+
