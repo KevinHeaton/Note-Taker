@@ -5,26 +5,9 @@
       "text": "Test text"
     },
     {
-      "title": "note 4",
-      "text": "note text 2"
-    },
-    {
-      "title": "note 6",
-      "text": "note text 6"
-    },
-    {
-      "title": "Test Title1",
-      "text": "Test text2"
-    },
-    {
-      "title": "Test Title1",
-      "text": "Test text2",
-      "id": "12925bcc-3942-48d5-971d-d1372b4ce578"
-    },
-    {
-      "title": "Test Title1",
-      "text": "Test text2",
-      "id": "e46bd8e4-5730-40a1-823d-789bb2c25828"
+      "title": "Test",
+      "text": "Test",
+      "id": "c3e29b21-ff30-4a03-91ef-15f4985fd45b"
     }
   ]
 }
