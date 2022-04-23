@@ -14,17 +14,19 @@ const { notes } = require('./Develop/db/db.json');
 
 
 function findById(id, notesArray) {
-  const result = notesArray.filter(note => note.id === id)[0];
+  const result = notesArray.filter(notes => notes.id === id)[0];
   return result;
 }
 
 function createNewNote(body, notesArray) {
   const note = body;
+  note.id = uuidv4();
   notesArray.push(note);
   fs.writeFileSync(
     path.join(__dirname, './Develop/db/db.json'),
     JSON.stringify({ notes: notesArray }, null, 2)
   );
+
 
   return note;
 }
@@ -35,7 +37,7 @@ app.get('/api/notes', (req, res) => {
   if (results) {
     res.json(results);
   } else {
-    res.send(404);
+    res.sendStatus(404);
   }
 });
 
@@ -51,26 +53,24 @@ app.get('/api/notes/:id', (req, res) => {
 
 // allow notes to be sent to api/notes
 app.post('/api/notes', (req, res) => {
-  req.body.id = notes.length.toString();
+  const newNote = createNewNote(req.body, notes);
+  res.json(newNote);
 
-    //const id = uuidv4()
-
-
-  if (!validateNote(req.body)) {
-    res.status(400).send('The note is not properly formatted.');
-  } else {
-    res.json(req.body);
-  }
+  // if (!validateNote(req.body)) {
+  //   res.status(400).send('The note is not properly formatted.');
+  // } else {
+  //   res.json(req.body);
+  // }
 });
 
-function validateNote(note) {
-  if (!note.title || typeof note.title !== 'string') {
-    return false;
-  }
-  if (!note.text || typeof note.text !== 'string') {
-    return false;
-  }
-};
+// function validateNote(note) {
+//   if (!note.title || typeof note.title !== 'string') {
+//     return false;
+//   }
+//   if (!note.text || typeof note.text !== 'string') {
+//     return false;
+//   }
+// };
 
 
 app.listen(PORT, () => {
