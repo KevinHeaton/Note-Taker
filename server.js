@@ -31,6 +31,8 @@ function createNewNote(body, notesArray) {
   return note;
 }
 
+
+
 // gets results of api/notes
 app.get('/api/notes', (req, res) => {
   const results = notes
@@ -55,22 +57,33 @@ app.get('/api/notes/:id', (req, res) => {
 app.post('/api/notes', (req, res) => {
   const newNote = createNewNote(req.body, notes);
   res.json(newNote);
-
-  // if (!validateNote(req.body)) {
-  //   res.status(400).send('The note is not properly formatted.');
-  // } else {
-  //   res.json(req.body);
-  // }
 });
 
-// function validateNote(note) {
-//   if (!note.title || typeof note.title !== 'string') {
-//     return false;
-//   }
-//   if (!note.text || typeof note.text !== 'string') {
-//     return false;
-//   }
-// };
+// app.delete('/api/notes/:id', (req, res) => {
+//   // res.send('Delete request.')
+//   const deleteNote = req.params.id;
+//   fs.readFile('./Develop/db/db.json', (err, data) => {
+//     if (err) {
+//       throw err;
+//     }
+//      noteData = JSON.stringify(data);
+
+//      fs.writeFileSync('./Develop/db/db.json', noteData, (err, data) => {
+//        if (err) {
+//          throw err;
+//        }
+//      })
+
+//   })
+
+//   // if (result) {
+//   //   res.json(result);
+//   //   return true;
+//   // } else {
+//   //   return false;
+//   // }
+// });
+
 
 
 app.listen(PORT, () => {
@@ -86,5 +99,3 @@ app.get('/notes', (req, res) => {
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './Develop/public/index.html'));
 });
-
-
